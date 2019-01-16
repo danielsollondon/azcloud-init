@@ -8,6 +8,16 @@ This article shows you how to take an existing Azure virtual machine and prepare
 This document assumes you already have a running Azure virtual machine running a supported version of the Linux operating system. You have already configured the machine to suit your needs, installed all the required modules, processed all the required updates and have tested it to ensure it meets your requirements. 
 
 ## Preparing RHEL 7.6 / CentOS 7.6
+Create a base VM to build the image:
+```bash
+az vm create \
+  --resource-group <rgName> \
+  --name <vmName> \
+  --admin-username <userName> \
+  --image OpenLogic:CentOS:7.6:latest \
+  --ssh-key-value /sshKeyPath/sshKey.pub
+```
+
 You need to SSH into your Linux VM and run the following commands in order to install cloud-init.
 
 ```bash
