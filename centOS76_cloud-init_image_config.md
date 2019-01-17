@@ -143,7 +143,7 @@ swapoff /mnt/resource/swapfile
 rm /mnt/resource/swapfile
 
 
-echo Set DS properties - not setting this causes 2s
+echo Set DS properties - not setting this causes 2s delay
 cat > /etc/cloud/cloud.cfg.d/91-azure_datasource.cfg <<EOF
 # This configuration file is used to connect to the Azure DS sooner
 datasource_list: [ Azure ]
