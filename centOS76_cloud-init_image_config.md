@@ -22,9 +22,8 @@ You need to SSH into your Linux VM and run the following commands in order to in
 
 ```bash
 sudo yum makecache fast
-sudo yum install -y cloud-init gdisk
-sudo yum check-update cloud-init -y
-sudo yum install cloud-init -y
+yum install -y gdisk cloud-utils-growpart
+yum install - y cloud-init 
 ```
 
 Update the `cloud_init_modules` section in `/etc/cloud/cloud.cfg` to include the following modules:
@@ -56,6 +55,7 @@ sed -i 's/Provisioning.Enabled=y/Provisioning.Enabled=n/g' /etc/waagent.conf
 sed -i 's/Provisioning.UseCloudInit=n/Provisioning.UseCloudInit=y/g' /etc/waagent.conf
 sed -i 's/ResourceDisk.Format=y/ResourceDisk.Format=n/g' /etc/waagent.conf
 sed -i 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/g' /etc/waagent.conf
+cloud-init clean
 ```
 
 Find the Azure datasource sooner, by creating a new file `/etc/cloud/cloud.cfg.d/91-azure_datasource.cfg` using an editor of your choice with the following lines:
@@ -121,8 +121,8 @@ az image create --resource-group myResourceGroup --name myCloudInitImage --sourc
 
 ```bash
 yum makecache fast
-echo install cloud-init dependency 
-yum install -y gdisk
+echo install cloud-init dependencies 
+yum install -y gdisk cloud-utils-growpart
 echo install of cloud-init
 yum install -y cloud-init
 
