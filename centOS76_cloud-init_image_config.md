@@ -1,7 +1,7 @@
 Author : Daniel Sol January 2019
 
 
-# Private Preview : Prepare an existing RHEL/CentOS 7.6 Linux Azure VM image for use with cloud-init
+# Private Preview : Prepare an existing RHEL/CentOS/OracleLinux 7.6 Linux Azure VM image for use with cloud-init
 This article shows you how to take an existing Azure virtual machine and prepare it to be redeployed and ready to use cloud-init. The resulting image can be used to deploy a new virtual machine or virtual machine scale sets - either of which could then be further customized by cloud-init at deployment time.  These cloud-init scripts run on first boot once the resources have been provisioned by Azure. For more information about how cloud-init works natively in Azure and the supported Linux distros, see [cloud-init overview](using-cloud-init.md)
 
 ## Prerequisites
@@ -69,7 +69,7 @@ If your existing Azure image has a swap file configured and you want to change t
 
 For Red Hat based images - follow the instructions in the following Red Hat document explaining how to [remove the swap file](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/storage_administration_guide/swap-removing-file).
 
-For CentOS images with swapfile enabled, you can run the following command to turn off the swapfile:
+For CentOS and Oracle Linux images with swapfile enabled, you can run the following command to turn off the swapfile:
 ```bash
 sudo swapoff /mnt/resource/swapfile
 ```
@@ -86,8 +86,11 @@ UUID=7c473048-a4e7-4908-bad3-a9be22e9d37d /boot xfs defaults 0 0
 
 To save space and remove the swap file you can run the following command:
 ```bash
-rm /mnt/resource/swapfile
+rm /mnt/resource/swapfile -f
 ```
+
+**NOTE** If you want to use a swap file, you must add code in your image to set this up.
+
 ## Extra step for cloud-init prepared image
 > [!NOTE]
 > If your image was previously a **cloud-init** prepared and configured image, you need to do the following steps.
@@ -140,7 +143,7 @@ sed -i 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/g' /etc/waagent.co
         
 echo removing swapfile - oralinux uses a swapfile by default
 swapoff /mnt/resource/swapfile
-rm /mnt/resource/swapfile
+rm /mnt/resource/swapfile -f
 
 
 echo Set DS properties - not setting this causes 2s delay
