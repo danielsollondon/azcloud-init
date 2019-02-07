@@ -89,7 +89,7 @@ To save space and remove the swap file you can run the following command:
 rm /mnt/resource/swapfile -f
 ```
 
-**NOTE** If you want to use a swap file, you must add code in your image to set this up.
+**NOTE** If you want to use a swap file, you must add code in your image to set this up (this doc will be updated soon with an example).
 
 ## Extra step for cloud-init prepared image
 > [!NOTE]
