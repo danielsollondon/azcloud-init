@@ -1,0 +1,27 @@
+#cloud-config
+
+packages:
+- httpd
+
+runcmd:
+- touch /var/www/html/index.html
+- chown apache.apache /var/www/html/index.html
+
+- publicIp=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-08-01&format=text")
+- os=$(cat /etc/system-release)
+- kernel=$(cat uname -r)
+- serverFqdn=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/tags?api-version=2017-08-01&format=text" | sed 's/externalFqdn:*//') 
+- serverFaultDomain=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/platformFaultDomain?api-version=2017-08-01&format=text")
+- serverUpdateDomain=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/platformUpdateDomain?api-version=2017-08-01&format=text")
+- curl https://raw.githubusercontent.com/danielsollondon/azcloud-init/master/index.html -o /var/www/html/index.html
+
+- sed -i -e "s%<serverName>%$(hostname)%g" /var/www/html/index.html
+- sed -i -e "s%<serverIp>%$publicIp%g" /var/www/html/index.html
+- sed -i -e "s%<serverFqdn>%$serverFqdn%g" /var/www/html/index.html
+- sed -i -e "s%<serverFaultDomain>%$serverFaultDomain%g" /var/www/html/index.html
+- sed -i -e "s%<serverUpdateDomain>%$serverUpdateDomain%g" /var/www/html/index.html
+- sed -i -e "s%<serverOS>%$os%g" /var/www/html/index.html
+- sed -i -e "s%<serverKernel>%$kernel%g" /var/www/html/index.html
+
+- systemctl start httpd
+
