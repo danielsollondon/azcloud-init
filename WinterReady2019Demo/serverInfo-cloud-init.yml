@@ -1,20 +1,39 @@
 #cloud-config
 
+# you can add more users outs
+users:
+  - default
+  - name: azdemo
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys: 
+      - ssh-rsa xxxxx
+
+# upgrade packages
+package_upgrade: true
+
 packages:
+# installing appache
 - httpd
 
 runcmd:
-- touch /var/www/html/index.html
-- chown apache.apache /var/www/html/index.html
-
+## inline commands, setting vars from IMDS
 - publicIp=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-08-01&format=text")
 - os=$(cat /etc/system-release)
 - kernel=$(cat uname -r)
-- serverFqdn=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/tags?api-version=2017-08-01&format=text" | sed 's/externalFqdn:*//') 
 - serverFaultDomain=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/platformFaultDomain?api-version=2017-08-01&format=text")
 - serverUpdateDomain=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/platformUpdateDomain?api-version=2017-08-01&format=text")
-- curl https://raw.githubusercontent.com/danielsollondon/azcloud-init/master/index.html -o /var/www/html/index.html
 
+# getting info from tag (passed at deployment time)
+- serverFqdn=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/tags?api-version=2017-08-01&format=text" | sed 's/externalFqdn:*//') 
+
+
+# download page from my github
+- curl https://raw.githubusercontent.com/danielsollondon/azcloud-init/master/index.html -o /var/www/html/index.html
+- chown apache.apache /var/www/html/index.html
+
+# update webpage with runtime info
 - sed -i -e "s%<serverName>%$(hostname)%g" /var/www/html/index.html
 - sed -i -e "s%<serverIp>%$publicIp%g" /var/www/html/index.html
 - sed -i -e "s%<serverFqdn>%$serverFqdn%g" /var/www/html/index.html
@@ -23,5 +42,6 @@ runcmd:
 - sed -i -e "s%<serverOS>%$os%g" /var/www/html/index.html
 - sed -i -e "s%<serverKernel>%$kernel%g" /var/www/html/index.html
 
+# and dont forget to start appache....because it helps
 - systemctl start httpd
 

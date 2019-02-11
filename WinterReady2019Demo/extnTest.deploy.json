@@ -236,6 +236,10 @@
         "adminUsername": {
             "type": "string",
             "value": "[parameters('adminUsername')]"
+        },
+        "webSite": {
+            "type": "string",
+            "value": "[concat('http://', reference(concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName')), '2016-03-30').dnsSettings.fqdn)]"
         }
     }
 }

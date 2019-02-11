@@ -1,0 +1,24 @@
+#cloud-config
+
+runcmd:
+- echo "registering with RH"
+- sudo subscription-manager register --username **** --password ****** --auto-attach
+
+users:
+  - default
+  - name: azdemo
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys: 
+      - ssh-rsa xxxxx
+
+write_files:
+  - content: |
+        *******************************************************
+        **            This VM was customized by :            **
+        **                !!  cloud-init  !!                 **
+        **         You have just been cloud-init'ed :-)      **
+        *******************************************************
+    path: /etc/motd
+    permissions: 0755
