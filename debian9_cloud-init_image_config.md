@@ -16,7 +16,7 @@ az vm create \
   --ssh-key-value /.../.pub 
 ```
 ## Step 2: Run the Script
-Inside the VM, run this script as root :debian9_cloud-init_script.sh
+ssh into the VM, run this script as root: [debian9_cloud-init_script.sh](https://raw.githubusercontent.com/danielsollondon/azcloud-init/master/debian9_cloud-init_script.sh)
 
 ## Step 3: Create an Image
 
