@@ -1,6 +1,8 @@
-# Cloud-init configuration for Debian 9
+# Private Preview Cloud-init configuration for Debian 9
 
 Please see these instructions to configure an existing Azure Marketplace Debian 9 Azure VM, to be provisioned by cloud-init 18.5.
+
+>> Note!! This is in early Alpha testing phase only, and should not be used for production!
 
 The script will install an updated waagent package, and cloud-init 18.5, run the configurations, and guests deprovisioning code. 
 
