@@ -11,7 +11,6 @@
       "client_id": "{{user `client_id`}}",
       "client_secret": "{{user `client_secret`}}",
       "subscription_id": "{{user `subscription_id`}}",
-      "resource_group": "{{user `resource_group`}}",
       "image_resource_id": "/subscriptions/{{user `subscription_id`}}/resourceGroups/{{user `resource_group`}}/providers/Microsoft.Compute/images/MyDebianOSImage-{{timestamp}}",
       "source": "credativ:Debian:9:latest"
     }],
