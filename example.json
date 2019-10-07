@@ -7,7 +7,7 @@
     },
     "builders": [{
       "type": "azure-chroot",
-      "command_wrapper": "sudo {{.Command}}",
+
       "client_id": "{{user `client_id`}}",
       "client_secret": "{{user `client_secret`}}",
       "subscription_id": "{{user `subscription_id`}}",
