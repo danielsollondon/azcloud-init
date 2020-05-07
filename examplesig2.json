@@ -30,9 +30,7 @@
 
     "os_disk_size_gb": 64,
     "os_disk_storage_account_type": "Standard_LRS",
-    "os_disk_cache_type": "ReadOnly",
-
-    "skip_clean_up": true
+    "os_disk_cache_type": "ReadOnly"
 
 
 
