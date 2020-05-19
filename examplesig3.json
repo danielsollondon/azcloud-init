@@ -1,0 +1,56 @@
+{
+  "variables": {
+
+    "client_id": "{{env `ARM_CLIENT_ID`}}",
+    "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+    "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+
+    "dest_SIG_resource_group": "<destinationSigResourceGroup>",
+    "dest_gallery_name": "<destinationSigGalleryName>",
+    "dest_gallery_def_name": "<destinationSigDefinitionName>",
+    "dest_gallery_def_img_ver": "1.0.0",
+
+    "sourceSigVersionResID": "/subscriptions/<subID>/resourceGroups/<sigResourceGroup>/providers/Microsoft.Compute/galleries/<sigGalleryname>/images/<sigImageDefintionName>/versions/<srcImageVersion>"
+
+  },
+  "builders": [{
+    "type": "azure-chroot",
+    "command_wrapper": "sudo {{.Command}}",
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+    "subscription_id": "{{user `subscription_id`}}",
+    "source": "{{user `sourceSigVersionResID`}}",
+
+    "shared_image_destination": {
+      "resource_group": "{{user `dest_SIG_resource_group` }}",
+      "gallery_name": "{{user `dest_gallery_name`}}",
+      "image_name": "{{user `dest_gallery_def_name`}}",
+      "image_version": "{{user `dest_gallery_def_img_ver`}}"
+    },
+
+    "os_disk_size_gb": 64,
+    "os_disk_storage_account_type": "Standard_LRS",
+    "os_disk_cache_type": "ReadOnly"
+
+
+
+  }],
+  "provisioners": [{
+    "inline": [
+      "sudo apt-get update",
+      "sudo apt-get upgrade -y",
+      "mkdir -p /tmp/staging",
+      "touch /tmp/staging/creativityAtItsBest.md"
+    ],
+    "inline_shebang": "/bin/sh -x",
+    "type": "shell"
+  },
+  {
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "inline": [
+        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+      ],
+      "inline_shebang": "/bin/sh -x",
+      "type": "shell"
+    }]
+}
